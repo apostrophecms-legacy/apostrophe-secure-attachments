@@ -34,7 +34,7 @@ site that doesn't really need it.
 
 This module supports configurations where Apostrophe's media is served from S3 rather than local files, with the following contraints:
 
-* You must not use `APOS_UPLOADFS_ASSETS=1`. Apostrophe's static assets will still be served, they just won't be copied to S3. They will be served via Apostrophe and/or nginx `try_files` rather than the S3 bucket.
+* Apostrophe's static assets will still be served, but they won't be copied to S3. The provided implementation is compatible with `APOS_BUNDLE=1` bundle extraction behavior. They will be served via Apostrophe and/or nginx `try_files` rather than the S3 bucket.
 * As of this writing, only S3 is currently supported for this, not Azure or Google Cloud Storage. Interested parties may wish to contribute implementations of the `streamOut` method to those storage adapters in [uploadfs](https://github.com/apostrophecms/uploadfs).
 * Streaming media from S3 in this way imposes a more significant performance penalty than streaming from local files. Apostrophe must first check the attachment permissions, then open a connection to S3, then stream the data to itself and pipe it onwards to the browser.
 
@@ -125,3 +125,22 @@ module.exports = {
 };
 ```
 
+## How to let the user log in to access a file
+
+By default users just see a "forbidden" message. This is secure, but you might want a friendlier approach.
+
+If you do, pass a custom `handleForbidden` function when configuring `apostrophe-attachments`:
+
+```javascript
+// in lib/modules/apostrophe-attachments/index.js
+
+module.exports = {
+  // self is the apostrophe-attachments module object, in case you need it
+  handleForbidden(self, req) {
+    // This is the default behavior, change it in your override
+    req.res.status(403).send('forbidden');
+  }
+}
+```
+
+You can access the URL the user originally wanted via `req.url`.

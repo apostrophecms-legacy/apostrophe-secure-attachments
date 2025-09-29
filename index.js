@@ -11,7 +11,8 @@ module.exports = {
     directory: 'lib/modules',
     modules: [
       'apostrophe-secure-attachments-images',
-      'apostrophe-secure-attachments-files'
+      'apostrophe-secure-attachments-files',
+      'apostrophe-secure-attachments-assets'
     ]
   },
   improve: 'apostrophe-attachments',
@@ -30,8 +31,8 @@ module.exports = {
       url: `${base}/secure-uploads`
     };
     // For S3
-    options.uploadfs.bucketObjectACL = 'private';
-    options.uploadfs.disabledBucketObjectACL = 'private';
+    options.uploadfs.bucketObjectsACL = 'private';
+    options.uploadfs.disabledBucketObjectsACL = 'private';
  
     // For local
     options.uploadfs.uploadsPath = options.apos.rootDir + '/data/secure-uploads';
@@ -129,12 +130,19 @@ module.exports = {
         if (e === 'notfound') {
           return res.status(404).send('not found');
         } if (e === 'forbidden') {
-          return res.status(403).send('forbidden');
+          return options.handleForbidden?.(self, req) || self.handleForbidden(req);
         } else {
           self.apos.utils.error(e);
           return res.status(500).send('error');
         }
       }
     };
+
+    // Default implementation
+    self.handleForbidden = req => {
+      req.res.status(403).send('forbidden');
+      console.log('sent forbidden');
+    };
+
   }
 };

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.1.1 (2025-09-29)
+
+* Fixed typos that prevented the S3 support from correctly overriding the ACLs.
+* Added `handleForbidden` option for those who want to change the default behavior.
+
 ## 2.1.0 (2024-10-15)
 
 Support for S3, and any other `uploadfs` storage backend that has been modernized with a `streamOut` implementation. This allows the module to be used in a scaled application with multiple servers. Not compatible with `APOS_UPLOADFS_ASSETS=1`.
