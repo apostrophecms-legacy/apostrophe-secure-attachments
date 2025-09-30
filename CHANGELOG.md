@@ -1,6 +1,10 @@
 # Changelog
 
-## 2.1.1 (2025-09-29)
+## 2.1.2 (2025-09-30)
+
+* Removed noisy console.log calls. No other changes.
+
+## 2.1.1 (2025-09-30)
 
 * Fixed typos that prevented the S3 support from correctly overriding the ACLs.
 * Added `handleForbidden` option for those who want to change the default behavior.

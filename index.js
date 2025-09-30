@@ -141,7 +141,6 @@ module.exports = {
     // Default implementation
     self.handleForbidden = req => {
       req.res.status(403).send('forbidden');
-      console.log('sent forbidden');
     };
 
   }
